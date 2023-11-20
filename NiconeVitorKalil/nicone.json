@@ -1,0 +1,45 @@
+
+{
+    "data": [
+      {
+        "id": "post_123456789",
+        "username": "john_doe",
+        "timestamp": "2023-11-14T12:30:00Z",
+        "caption": "Enjoying a beautiful day! #sunnyday ☀️",
+        "likes": 256,
+        "comments": [
+          {
+            "id": "comment_1",
+            "username": "jane_smith",
+            "text": "Looks amazing! 😍"
+          },
+          {
+            "id": "comment_2",
+            "username": "sam_jones",
+            "text": "Wish I were there!"
+          }
+        ],
+        "image_url": "https://vitor.com/images/post123456789.jpg"
+      },
+      {
+        "id": "post_987654321",
+        "username": "mary_jane",
+        "timestamp": "2023-11-13T18:45:00Z",
+        "caption": "Dinner with friends. 🍽️",
+        "likes": 102,
+        "comments": [
+          {
+            "id": "comment_3",
+            "username": "peter_parker",
+            "text": "Great company! 👍"
+          },
+          {
+            "id": "comment_4",
+            "username": "emma_watson",
+            "text": "Delicious food!"
+          }
+        ],
+        "image_url": "https://vitor.com/images/post987654321.jpg"
+      }
+    ]
+  }
