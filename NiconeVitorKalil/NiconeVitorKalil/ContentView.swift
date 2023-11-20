@@ -9,13 +9,7 @@ import SwiftUI
 import SwiftData
 import Foundation
 
-struct TestApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
+
 
 struct Response: Codable {
     let data: [Post]
@@ -43,16 +37,16 @@ struct ContentView: View {
             ScrollView(showsIndicators: false){
                 ScrollView(.horizontal,showsIndicators: false){
                     HStack{
-                        StoriesView()
-                        StoriesView()
-                        StoriesView()
-                        StoriesView()
-                        StoriesView()
-                        StoriesView()
+                        Button(){}label:{StoriesView()}
+                        Button(){}label:{StoriesView()}
+                        Button(){}label:{StoriesView()}
+                        Button(){}label:{StoriesView()}
+                        Button(){}label:{StoriesView()}
+                        Button(){}label:{StoriesView()}
                     }.padding(.horizontal)
                 }.padding(.bottom, 5.0)
                 VStack{
-                   PostView()
+                    PostView()
                    PostView()
                    PostView()
                    PostView()
