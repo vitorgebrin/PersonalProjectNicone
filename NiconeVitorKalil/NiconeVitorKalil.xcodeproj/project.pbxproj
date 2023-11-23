@@ -14,9 +14,9 @@
 		6B4DC2B92B0390FE007664D1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B4DC2B82B0390FE007664D1 /* Preview Assets.xcassets */; };
 		6B4DC2C02B061D82007664D1 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4DC2BF2B061D82007664D1 /* Feed.swift */; };
 		6B4DC2C22B061E11007664D1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4DC2C12B061E11007664D1 /* Post.swift */; };
-		6B4DC2C42B076476007664D1 /* nicone.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B4DC2C32B076476007664D1 /* nicone.json */; };
 		6B4DC2C62B077F69007664D1 /* ReelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4DC2C52B077F69007664D1 /* ReelsView.swift */; };
 		6B4DC2C82B0783E8007664D1 /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4DC2C72B0783E8007664D1 /* PostView.swift */; };
+		6B4DC2CA2B0B7C33007664D1 /* PostTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4DC2C92B0B7C33007664D1 /* PostTestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,9 +28,9 @@
 		6B4DC2B82B0390FE007664D1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6B4DC2BF2B061D82007664D1 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		6B4DC2C12B061E11007664D1 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		6B4DC2C32B076476007664D1 /* nicone.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = nicone.json; path = ../nicone.json; sourceTree = "<group>"; };
 		6B4DC2C52B077F69007664D1 /* ReelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReelsView.swift; sourceTree = "<group>"; };
 		6B4DC2C72B0783E8007664D1 /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
+		6B4DC2C92B0B7C33007664D1 /* PostTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +70,7 @@
 				6B4DC2C52B077F69007664D1 /* ReelsView.swift */,
 				6B4DC2C72B0783E8007664D1 /* PostView.swift */,
 				6B4DC2B32B0390FC007664D1 /* Item.swift */,
-				6B4DC2C32B076476007664D1 /* nicone.json */,
+				6B4DC2C92B0B7C33007664D1 /* PostTestView.swift */,
 				6B4DC2B52B0390FE007664D1 /* Assets.xcassets */,
 				6B4DC2B72B0390FE007664D1 /* Preview Content */,
 			);
@@ -145,7 +145,6 @@
 			files = (
 				6B4DC2B92B0390FE007664D1 /* Preview Assets.xcassets in Resources */,
 				6B4DC2B62B0390FE007664D1 /* Assets.xcassets in Resources */,
-				6B4DC2C42B076476007664D1 /* nicone.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +161,7 @@
 				6B4DC2B42B0390FC007664D1 /* Item.swift in Sources */,
 				6B4DC2B02B0390FC007664D1 /* NiconeVitorKalilApp.swift in Sources */,
 				6B4DC2C62B077F69007664D1 /* ReelsView.swift in Sources */,
+				6B4DC2CA2B0B7C33007664D1 /* PostTestView.swift in Sources */,
 				6B4DC2C22B061E11007664D1 /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

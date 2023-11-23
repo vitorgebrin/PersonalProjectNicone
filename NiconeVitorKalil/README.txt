@@ -1,0 +1,2 @@
+This application was developed only for learning purpose. The objective was to learn how to get and show data from a real API, do HTTP requests and save downloaded images on a cache system with Swift and SwiftUI on the easiest way possible.
+This App uses an Instagram Basic Display API Token that is available for free to any developer with a personal or business Instagram account.

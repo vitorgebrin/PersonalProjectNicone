@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct instagram_feed:Codable{
+struct tatagram_feed:Codable{
     var posts:[Post]?
 }

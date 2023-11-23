@@ -7,11 +7,10 @@
 
 import Foundation
  
-struct Post:Codable {
+struct Post:Codable,Identifiable {
     let id:String
     let username:String
     let timestamp:String
-    let caption:String
-    let likes:Int
-    let image_url:String
+    let caption:String?
+    let media_url:String
 }

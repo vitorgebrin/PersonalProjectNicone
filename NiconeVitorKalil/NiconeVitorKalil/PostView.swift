@@ -7,59 +7,207 @@
 
 import SwiftUI
 
+
+class ImageCache {
+    static let shared = ImageCache()
+
+    private let cache = NSCache<NSString, UIImage>()
+
+    private init() {}
+
+    func set(_ image: UIImage, forKey key: String) {
+        cache.setObject(image, forKey: key as NSString)
+    }
+
+    func get(forKey key: String) -> UIImage? {
+        return cache.object(forKey: key as NSString)
+    }
+}
+
+struct RemoteImage: View {
+    @ObservedObject var imageLoader: ImageLoader
+
+    init(url: String) {
+        imageLoader = ImageLoader(url: url)
+    }
+
+    var body: some View {
+        if let image = imageLoader.image {
+            Image(uiImage: image)
+                .resizable()
+        } else {
+            ProgressView()
+        }
+    }
+}
+
+class ImageLoader: ObservableObject {
+    @Published var image: UIImage?
+
+    private var url: String
+    private var task: URLSessionDataTask?
+
+    init(url: String) {
+        self.url = url
+        loadImage()
+    }
+
+    private func loadImage() {
+        if let cachedImage = ImageCache.shared.get(forKey: url) {
+            self.image = cachedImage
+            return
+        }
+
+        guard let url = URL(string: url) else { return }
+
+        task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+
+            DispatchQueue.main.async {
+                let image = UIImage(data: data)
+                self.image = image
+                ImageCache.shared.set(image!, forKey: self.url)
+            }
+        }
+        task?.resume()
+    }
+}
+
+
 struct PostView: View {
     @State var isLiked:Bool = false
     @State var isTagged:Bool = false
+    @State var likesPost:Int = Int.random(in: 1..<400)
+    var userName:String = "placeholder"
+    var caption:String = "LOREM IPSUM ASHHAHSAHSHSSHahsah sahshash ahsahshahs aasahsahs"
+    
+    var postUrl:String = "https://vitorkalil.it/static/media/foto.b34f930a36c7697cb4b3.png"
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment:.center){
-                AsyncImage(url: URL(string: "https://scontent.cdninstagram.com/v/t51.2885-19/332268024_6095995720451229_4851887019350547050_n.jpg?stp=dst-jpg_e0_s150x150&cb=efdfa7ed-2e54251b&efg=eyJxZV9ncm91cHMiOiJbXCJpZ19ianBnX3Byb2ZpbGVfcGljXzA3MDUtMFwiXSJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=IlHI3x2OrTwAX8sQFSp&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfDbXFb1yHE7BZePafE1nl42RHNWPb8KiVeFiFrE06vi_A&oe=65595ED5&_nc_sid=10d13b")!){ image in
-                    image.image?.resizable().aspectRatio(contentMode: .fit).frame(width:40).cornerRadius(30).padding(0)}
-                Text("placeholder").padding(.bottom, 3.0)
+                /*AsyncImage(url: URL(string: postUrl)!){ image in
+                    image.image?.resizable().aspectRatio(contentMode: .fill).frame(width:40,height:40).cornerRadius(30).padding(0)}*/
+                RemoteImage(url: postUrl).aspectRatio(contentMode: .fill).frame(width:40,height:40).cornerRadius(30).padding(0).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                Text(userName).padding(.bottom, 3.0).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 Spacer()
-                Image(systemName: "ellipsis")
+                Image(systemName: "ellipsis").accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             }.padding(.horizontal,10)
-            AsyncImage(url: URL(string: "https://scontent.cdninstagram.com/v/t51.2885-15/400037099_2323614781157066_8140699638827879756_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEwODAuc2RyIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=102&_nc_ohc=8E8Vp5FY1FIAX-n1nmy&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzIzMDc3NzQ1NzIxNTM2OTgwNQ%3D%3D.2-ccb7-5&oh=00_AfCJAt0L8YrTauJosm2wlVQrxMFZe1nC8cGPjI7owJ5Xeg&oe=6558C347&_nc_sid=10d13b")!){ image in
-                image.image?.resizable().aspectRatio(contentMode: .fit)}.padding(.top,10)
+            /*AsyncImage(url: URL(string: postUrl)!){ image in
+                image.image?.resizable().aspectRatio(contentMode: .fit)}*/
+            RemoteImage(url: postUrl).aspectRatio(contentMode: .fit)
+            .padding(.top,10).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             HStack(alignment:.center){
-                Button(){ isLiked = !isLiked }label:{Image(systemName: isLiked ? "heart.fill":"heart")
+                Button(){ 
+                    isLiked.toggle()
+                    (isLiked ? (likesPost+=1):(likesPost-=1))
+                }label:{Image(systemName: isLiked ? "heart.fill":"heart")
                         .resizable()
                         .foregroundColor(isLiked ? .red:.black)
                         .aspectRatio(contentMode: .fit)
-                    .frame(width:25)}
+                    .frame(width:25)}.accessibilityLabel("Like")
                 Image(systemName: "message").resizable().aspectRatio(contentMode: .fit)
-                    .frame(width:25).padding(.horizontal,10)
+                    .frame(width:25).padding(.horizontal,10).accessibilityLabel("Comment this post")
                 Image(systemName: "paperplane").resizable().aspectRatio(contentMode: .fit)
-                    .frame(width:25)
+                    .frame(width:25).accessibilityLabel("Send this post to someone")
                 Spacer()
                 Button(){ isTagged = !isTagged }label:{
                     Image(systemName: isTagged ? "bookmark.fill":"bookmark")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.black)
-                        .frame(width:15)}
+                        .frame(width:15)}.accessibilityLabel("Mark this Post")
             }.padding(.horizontal,15).padding(.top,1.0)
-            Text("1.000 likes")
+            Text("\(likesPost) likes")
                 .font(.footnote)
                 .fontWeight(.semibold).padding(.top,10).padding(.horizontal,15)
-            (Text("Place Holder").fontWeight(.semibold) + Text(" ") + Text("LOREM IPSUM ASHHAHSAHSHSSHahsah sahshash ahsahshahs aasahsahs").fontWeight(.regular))
+            (Text(userName).fontWeight(.semibold) + Text(" ") + Text(caption).fontWeight(.regular))
                 .font(.footnote)
                 .fontWeight(.semibold).padding(.vertical,2).padding(.leading,15)
             Text("View all comments")
-                .font(.footnote).foregroundColor(Color.gray).padding(.horizontal,15)
+                .font(.footnote).foregroundColor(Color.gray).padding(.horizontal,15).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             HStack(alignment:.center){
-                AsyncImage(url: URL(string: "https://scontent.cdninstagram.com/v/t51.2885-19/332268024_6095995720451229_4851887019350547050_n.jpg?stp=dst-jpg_e0_s150x150&cb=efdfa7ed-2e54251b&efg=eyJxZV9ncm91cHMiOiJbXCJpZ19ianBnX3Byb2ZpbGVfcGljXzA3MDUtMFwiXSJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=IlHI3x2OrTwAX8sQFSp&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfDbXFb1yHE7BZePafE1nl42RHNWPb8KiVeFiFrE06vi_A&oe=65595ED5&_nc_sid=10d13b")!){ image in
-                    image.image?.resizable().aspectRatio(contentMode: .fit).frame(width:20).cornerRadius(20).padding(0)}
+                /*AsyncImage(url: URL(string: postUrl)!){ image in
+                    image.image?.resizable()
+                    .aspectRatio(contentMode: .fill).frame(width:20,height:20).cornerRadius(20).padding(0)}*/
+                RemoteImage(url: postUrl).aspectRatio(contentMode: .fill).frame(width:20,height:20).cornerRadius(20).padding(0).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 Text("Add a comment...").font(.footnote).foregroundColor(Color.gray).padding(.bottom, 3.0)
                 Spacer()
-            }.padding(.horizontal,10)
+            }.padding(.horizontal,10).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             Text("6 days ago")
-                .font(.footnote).foregroundColor(Color.gray).padding(.horizontal,15)
+                .font(.footnote).foregroundColor(Color.gray).padding(.horizontal,15).accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
         }.padding(.vertical,15)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Post by\(userName). The post has \(likesPost) likes and you \(isLiked ? "already":"have not") liked it")
     }
+        
 }
 
 #Preview {
     PostView()
 }
-//src="https://scontent.cdninstagram.com/v/t51.2885-19/332268024_6095995720451229_4851887019350547050_n.jpg?stp=dst-jpg_e0_s150x150&cb=efdfa7ed-2e54251b&efg=eyJxZV9ncm91cHMiOiJbXCJpZ19ianBnX3Byb2ZpbGVfcGljXzA3MDUtMFwiXSJ9&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=IlHI3x2OrTwAX8sQFSp&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfDbXFb1yHE7BZePafE1nl42RHNWPb8KiVeFiFrE06vi_A&oe=65595ED5&_nc_sid=10d13b"
+/*
+ class ImageCache {
+     static let shared = ImageCache()
+
+     private let cache = NSCache<NSString, UIImage>()
+
+     private init() {}
+
+     func set(_ image: UIImage, forKey key: String) {
+         cache.setObject(image, forKey: key as NSString)
+     }
+
+     func get(forKey key: String) -> UIImage? {
+         return cache.object(forKey: key as NSString)
+     }
+ }
+
+ struct RemoteImage: View {
+     @ObservedObject var imageLoader: ImageLoader
+
+     init(url: String) {
+         imageLoader = ImageLoader(url: url)
+     }
+
+     var body: some View {
+         if let image = imageLoader.image {
+             Image(uiImage: image)
+                 .resizable()
+         } else {
+             ProgressView()
+         }
+     }
+ }
+
+ class ImageLoader: ObservableObject {
+     @Published var image: UIImage?
+
+     private var url: String
+     private var task: URLSessionDataTask?
+
+     init(url: String) {
+         self.url = url
+         loadImage()
+     }
+
+     private func loadImage() {
+         if let cachedImage = ImageCache.shared.get(forKey: url) {
+             self.image = cachedImage
+             return
+         }
+
+         guard let url = URL(string: url) else { return }
+
+         task = URLSession.shared.dataTask(with: url) { data, response, error in
+             guard let data = data, error == nil else { return }
+
+             DispatchQueue.main.async {
+                 let image = UIImage(data: data)
+                 self.image = image
+                 ImageCache.shared.set(image!, forKey: self.url)
+             }
+         }
+         task?.resume()
+     }
+ }
+ */
